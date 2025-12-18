@@ -1,0 +1,150 @@
+{
+  "sites": {
+    "google": {
+      "patterns": ["google.", "gmail.", "youtube."],
+      "services": {
+        "gmail": ["mail.google", "gmail."],
+        "youtube": ["youtube."],
+        "search": ["google.com"]
+      },
+      "auth": ["SID", "HSID", "SSID", "SAPISID", "__Secure-3PSID"]
+    },
+    "amazon": {
+      "patterns": ["amazon."],
+      "services": {
+        "shopping": ["amazon.com"]
+      },
+      "auth": ["session-id", "session-token", "ubid"]
+    },
+    "facebook": {
+      "patterns": ["facebook.", "fb."],
+      "services": {
+        "facebook": ["facebook.com"]
+      },
+      "auth": ["c_user", "xs"]
+    },
+    "instagram": {
+      "patterns": ["instagram"],
+      "services": {
+        "instagram": ["instagram.com"]
+      },
+      "auth": ["sessionid", "ds_user_id"]
+    },
+    "x": {
+      "patterns": ["x.com", "twitter.com"],
+      "services": {
+        "twitter": ["twitter.com", "x.com"]
+      },
+      "auth": ["auth_token", "ct0"]
+    },
+    "tiktok": {
+      "patterns": ["tiktok"],
+      "services": {
+        "tiktok": ["tiktok.com"]
+      },
+      "auth": ["sessionid", "sid_tt"]
+    },
+    "pornhub": {
+      "patterns": ["pornhub"],
+      "services": {
+        "pornhub": ["pornhub.com"]
+      },
+      "auth": []
+    },
+    "ebay": {
+      "patterns": ["ebay"],
+      "services": {
+        "marketplace": ["ebay.com"]
+      },
+      "auth": ["ebay"]
+    },
+    "paypal": {
+      "patterns": ["paypal"],
+      "services": {
+        "payment": ["paypal.com"]
+      },
+      "auth": ["PayPal"]
+    },
+    "reddit": {
+      "patterns": ["reddit"],
+      "services": {
+        "reddit": ["reddit.com"]
+      },
+      "auth": ["reddit_session"]
+    },
+    "linkedin": {
+      "patterns": ["linkedin"],
+      "services": {
+        "linkedin": ["linkedin.com"]
+      },
+      "auth": ["li_at", "JSESSIONID"]
+    },
+    "github": {
+      "patterns": ["github"],
+      "services": {
+        "github": ["github.com"]
+      },
+      "auth": ["user_session", "_gh_sess"]
+    },
+    "discord": {
+      "patterns": ["discord"],
+      "services": {
+        "discord": ["discord.com"]
+      },
+      "auth": ["__dcfduid", "__sdcfduid"]
+    },
+    "twitch": {
+      "patterns": ["twitch"],
+      "services": {
+        "twitch": ["twitch.tv"]
+      },
+      "auth": ["auth-token", "login"]
+    },
+    "netflix": {
+      "patterns": ["netflix"],
+      "services": {
+        "netflix": ["netflix.com"]
+      },
+      "auth": ["NetflixId", "SecureNetflixId"]
+    },
+    "spotify": {
+      "patterns": ["spotify"],
+      "services": {
+        "spotify": ["spotify.com"]
+      },
+      "auth": ["sp_dc", "sp_key"]
+    }
+  },
+  "scoring_rules": {
+    "sites": {
+      "google": 3,
+      "amazon": 4,
+      "ebay": 4,
+      "paypal": 4,
+      "facebook": 4,
+      "instagram": 4,
+      "x": 3,
+      "tiktok": 3,
+      "pornhub": 2,
+      "reddit": 3,
+      "linkedin": 4,
+      "github": 3,
+      "discord": 3,
+      "twitch": 3,
+      "netflix": 4,
+      "spotify": 3
+    },
+    "services": {
+      "google": {
+        "gmail": 5,
+        "youtube": 2
+      }
+    },
+    "auth_bonus": 6,
+    "levels": {
+      "HIGH": {"min_score": 15},
+      "MEDIUM": {"min_score": 6},
+      "LOW": {"min_score": 0}
+    }
+  }
+}
