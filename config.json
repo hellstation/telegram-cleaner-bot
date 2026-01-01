@@ -113,6 +113,57 @@
         "spotify": ["spotify.com"]
       },
       "auth": ["sp_dc", "sp_key"]
+    },
+    "roblox": {
+      "patterns": ["roblox"],
+      "services": {
+        "gaming": ["roblox.com"]
+      },
+      "auth": [".ROBLOSECURITY"]
+    },
+    "steam": {
+      "patterns": ["steam", "steampowered"],
+      "services": {
+        "gaming": ["store.steampowered.com", "steamcommunity.com"]
+      },
+      "auth": ["steamLoginSecure", "sessionid"]
+    },
+    "epicgames": {
+      "patterns": ["epicgames", "epic"],
+      "services": {
+        "gaming": ["epicgames.com", "store.epicgames.com"]
+      },
+      "auth": ["EPIC_SESSION_AP", "EPIC_SESSION_ID"]
+    },
+    "microsoft": {
+      "patterns": ["microsoft", "live", "outlook"],
+      "services": {
+        "outlook": ["outlook.live.com", "hotmail.com"],
+        "other": ["microsoft.com"]
+      },
+      "auth": ["MSFPC", "MSPAuth", "MSPOK"]
+    },
+    "apple": {
+      "patterns": ["apple", "icloud"],
+      "services": {
+        "icloud": ["icloud.com"],
+        "other": ["apple.com"]
+      },
+      "auth": ["myacinfo", "aasp"]
+    },
+    "genshin": {
+      "patterns": ["genshin", "mihoyo"],
+      "services": {
+        "gaming": ["genshin.mihoyo.com", "hoyolab.com"]
+      },
+      "auth": ["ltoken", "ltuid"]
+    },
+    "minecraft": {
+      "patterns": ["minecraft", "mojang"],
+      "services": {
+        "gaming": ["minecraft.net", "mojang.com"]
+      },
+      "auth": ["sid", "token"]
     }
   },
   "scoring_rules": {
@@ -132,7 +183,14 @@
       "discord": 3,
       "twitch": 3,
       "netflix": 4,
-      "spotify": 3
+      "spotify": 3,
+      "roblox": 3,
+      "steam": 4,
+      "epicgames": 3,
+      "microsoft": 4,
+      "apple": 4,
+      "genshin": 3,
+      "minecraft": 3
     },
     "services": {
       "google": {
@@ -146,5 +204,18 @@
       "MEDIUM": {"min_score": 6},
       "LOW": {"min_score": 0}
     }
+  },
+  "categories": {
+    "social": ["facebook", "instagram", "x", "tiktok", "reddit", "discord"],
+    "entertainment": ["netflix", "spotify", "twitch"],
+    "professional": ["linkedin", "github"],
+    "shopping": ["amazon", "ebay"],
+    "search": ["google"],
+    "gaming": ["roblox", "steam", "epicgames", "genshin", "minecraft"],
+    "payment": ["paypal"],
+    "education": ["linkedin", "github"],
+    "finance": ["paypal", "amazon", "ebay"],
+    "health": [],
+    "tech": ["microsoft", "apple", "google", "github"]
   }
 }

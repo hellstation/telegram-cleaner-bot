@@ -10,3 +10,4 @@ def load_config():
 config = load_config()
 SITES = config["sites"]
 SCORING_RULES = config["scoring_rules"]
+CATEGORIES = config["categories"]

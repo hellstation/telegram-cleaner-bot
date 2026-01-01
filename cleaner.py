@@ -10,7 +10,7 @@ from datetime import datetime, timezone
 from functools import lru_cache
 from typing import Dict, List, Optional, Set, Tuple
 
-from config import SITES, SCORING_RULES
+from config import SITES, SCORING_RULES, CATEGORIES
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -56,6 +56,13 @@ def get_main_domain(domain: str) -> str:
         "ebay": ["ebay"],
         "facebook": ["facebook", "fb"],
         "instagram": ["instagram"],
+        "roblox": ["roblox"],
+        "steam": ["steam", "steampowered"],
+        "epicgames": ["epicgames", "epic"],
+        "microsoft": ["microsoft", "live", "outlook"],
+        "apple": ["apple", "icloud"],
+        "genshin": ["genshin", "mihoyo"],
+        "minecraft": ["minecraft", "mojang"],
     }
 
     # Check for special mappings
@@ -260,6 +267,27 @@ def calculate_privacy_score(cleaned_count: int, total_count: int) -> float:
     privacy_score = (1 - retention_ratio) * 10
 
     return round(privacy_score, 1)
+
+
+def get_sites_by_category(site_counter: Counter) -> Dict[str, List[str]]:
+    """
+    Group sites by categories.
+
+    Args:
+        site_counter: Counter of sites.
+
+    Returns:
+        Dict of category to list of sites.
+    """
+    category_sites = defaultdict(list)
+    for site in site_counter:
+        for category, sites in CATEGORIES.items():
+            if site in sites:
+                category_sites[category].append(site)
+                break
+        else:
+            category_sites["other"].append(site)
+    return dict(category_sites)
 
 
 
