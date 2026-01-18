@@ -1,6 +1,7 @@
 import logging
 import os
 import tempfile
+import time
 from typing import Dict
 
 from aiogram import Router, F
@@ -8,6 +9,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.types import FSInputFile, KeyboardButton, ReplyKeyboardMarkup, Message
 
+from metrics import messages_processed, commands_processed, errors_total, processing_time, files_processed
 from cleaner import clean_cookies, get_sites_by_category
 
 logger = logging.getLogger(__name__)
@@ -25,6 +27,8 @@ class MenuStates(StatesGroup):
 
 @router.message(F.text == "/start")
 async def start(message: Message, state: FSMContext) -> None:
+    messages_processed.inc()
+    commands_processed.labels(command="/start").inc()
     keyboard = ReplyKeyboardMarkup(
         keyboard=[
             [KeyboardButton(text="🍪 Cookie Cleaner")],
@@ -51,6 +55,7 @@ async def cookie_cleaner_message(message: Message, state: FSMContext) -> None:
 
 @router.message(F.document)
 async def file_handler(message: Message, state: FSMContext) -> None:
+    messages_processed.inc()
     document = message.document
     if not document:
         await message.answer("Please upload a file.")
@@ -72,6 +77,7 @@ async def file_handler(message: Message, state: FSMContext) -> None:
     temp_output = None
     stats_file = None
 
+    start_time = time.time()
     try:
         try:
             await message.bot.edit_message_text(
@@ -189,9 +195,12 @@ async def file_handler(message: Message, state: FSMContext) -> None:
             status_msg = await message.answer("✅ Done! Upload another cookie file:", reply_markup=keyboard)
             await state.update_data(message_id=status_msg.message_id)
 
+        processing_time.observe(time.time() - start_time)
+        files_processed.inc()
         logger.info(f"Processed cookies for user {message.from_user.id}")
 
     except Exception as e:
+        errors_total.labels(type="file_processing").inc()
         logger.error(f"Error processing file: {e}")
         keyboard = ReplyKeyboardMarkup(
             keyboard=[
