@@ -9,8 +9,8 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.types import FSInputFile, KeyboardButton, ReplyKeyboardMarkup, Message
 
-from metrics import messages_processed, commands_processed, errors_total, processing_time, files_processed
-from cleaner import clean_cookies, get_sites_by_category
+from .metrics import messages_processed, commands_processed, errors_total, processing_time, files_processed
+from .cleaner import clean_cookies, get_sites_by_category
 
 logger = logging.getLogger(__name__)
 
@@ -121,7 +121,7 @@ async def file_handler(message: Message, state: FSMContext) -> None:
 
         stats_file = temp_input + "_stats.txt"
         with open(stats_file, "w", encoding="utf-8") as f:
-            from cleaner import calculate_score
+            from .cleaner import calculate_score
             site_counter = {site: count for site, count in stats["sites"].items()}
             service_counter = {site: {svc: 1 for svc in svcs} for site, svcs in stats["services"].items()}
             auth_detected = {site: set(cookies) for site, cookies in stats["auth_detected"].items()}

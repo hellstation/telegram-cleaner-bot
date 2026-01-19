@@ -11,8 +11,8 @@ from aiogram import Bot, Dispatcher
 from dotenv import load_dotenv
 from prometheus_client import generate_latest
 
-from handlers import router
-from metrics import registry
+from .handlers import router
+from .metrics import registry
 
 # Load environment
 load_dotenv()
