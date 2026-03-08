@@ -166,34 +166,76 @@ async def file_handler(message: Message, state: FSMContext) -> None:
         except Exception:
             await message.answer("✅ Processing complete! Sending results...")
 
+        # Get original filename without extension
+        original_name = os.path.splitext(document.file_name)[0]
+        cleaned_filename = f"cleaned_{original_name}.txt"
+
         keyboard = ReplyKeyboardMarkup(
             keyboard=[
                 [KeyboardButton(text="🔄 Upload Another"), KeyboardButton(text="❌ Cancel")]
             ],
             resize_keyboard=True
         )
+
+        # Create the full formatted report content
+        report_content = f"""🧠 SCORE: {score} ({level})
+
+"""
+
+        # Add site information
+        for site, count in stats["sites"].items():
+            site_name = site
+            services = ", ".join([s for s in stats["services"].get(site, []) if s])
+            if services:
+                report_content += f"{site_name}({count}) - {services}\n"
+            else:
+                report_content += f"{site_name}({count})\n"
+
+        # Add auth detected section
+        if stats["auth_detected"]:
+            report_content += "\n🔐 AUTH DETECTED:\n"
+            for site, cookies in stats["auth_detected"].items():
+                site_name = site
+                report_content += f"{site_name}: {', '.join(cookies)}\n"
+
+        # Add statistics section
+        report_content += f"""
+=== STATISTICS ===
+Total unique cookies: {stats['total_unique_cookies']}
+Unique main domains: {stats['unique_sites']}
+Most common domain: {stats['most_common_site']}
+Oldest cookies age: {stats.get('oldest_cookie_age', 'Unknown')}
+Tracking cookies detected: {stats.get('tracking_intensity', 0)}
+🏆 Privacy Score: {stats.get('privacy_score', 0.0)}/10.0
+"""
+
+        # Add categories section
+        if categories:
+            report_content += "\n=== BY CATEGORIES ===\n"
+            for category, sites in categories.items():
+                if sites:
+                    report_content += f"{category.capitalize()}: {', '.join(sites)}\n"
+
+        # Write the report to the cleaned file
+        with open(temp_output, "w", encoding="utf-8") as f:
+            f.write(report_content)
+
+        # Send the report file
         await message.answer_document(
-            FSInputFile(stats_file, filename="cleaned_cookies_stats.txt"),
-            caption=f"Cleaned cookies statistics. Total: {stats['total_cleaned']}\n\nChoose an action:",
+            FSInputFile(temp_output, filename=cleaned_filename),
+            caption=f"Cleaned cookies report. Total kept: {stats['total_cleaned']}\n\nChoose an action:",
             reply_markup=keyboard
         )
 
-        keyboard = ReplyKeyboardMarkup(
-            keyboard=[
-                [KeyboardButton(text="❌ Cancel")]
-            ],
-            resize_keyboard=True
-        )
+        # Final status update without sending another message since keyboard is already sent with stats
         try:
             await message.bot.edit_message_text(
                 chat_id=message.chat.id,
                 message_id=status_message_id,
-                text="✅ Done! Upload another cookie file:",
-                reply_markup=keyboard
+                text="✅ Processing complete!"
             )
         except Exception:
-            status_msg = await message.answer("✅ Done! Upload another cookie file:", reply_markup=keyboard)
-            await state.update_data(message_id=status_msg.message_id)
+            pass  # Status message already updated
 
         processing_time.observe(time.time() - start_time)
         files_processed.inc()

@@ -10,7 +10,7 @@ from datetime import datetime, timezone
 from functools import lru_cache
 from typing import Dict, List, Optional, Set, Tuple
 
-from config import SITES, SCORING_RULES, CATEGORIES
+from .config import SITES, SCORING_RULES, CATEGORIES
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
